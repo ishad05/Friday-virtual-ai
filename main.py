@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli, llm
 from livekit.agents.voice_assistant import VoiceAssistant
 from livekit.plugins import openai, silero
+from api import AssistantFnc  # Importing the functions from api.py
 
 load_dotenv()
 
@@ -19,12 +20,16 @@ async def entrypoint(ctx: JobContext):
 
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
+    # Load the assistant functionality
+    assistant_fnc = AssistantFnc()  # Adding functions from api.py
+
     assistant = VoiceAssistant(
         vad=silero.VAD.load(),
         stt=openai.STT(),
         llm=openai.LLM(),
         tts=openai.TTS(),
-        chat_ctx=initial_ctx
+        chat_ctx=initial_ctx,
+        fnc_ctx=assistant_fnc
     )
     assistant.start(ctx.room)
 
