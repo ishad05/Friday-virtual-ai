@@ -1,10 +1,11 @@
 import asyncio
-
+import subprocess
 from dotenv import load_dotenv
 from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli, llm
 from livekit.agents.voice_assistant import VoiceAssistant
 from livekit.plugins import openai, silero
 from api import AssistantFnc  # Importing the functions from api.py
+import webbrowser
 
 load_dotenv()
 
@@ -40,6 +41,16 @@ async def entrypoint(ctx: JobContext):
     await asyncio.sleep(1)
     await assistant.say("Hey, I am FRIDAY! how can i help you today?", allow_interruptions=True)
 
+def start_nextjs_app():
+    process = subprocess.Popen(
+        ["pnpm","dev"],
+        cwd="Friday",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    return process
 
 if __name__ == "__main__":
+    nextjs_process = start_nextjs_app()
+    webbrowser.open("http://localhost:3000")
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
