@@ -11,11 +11,13 @@ import {
   DisconnectButton,
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
-import { MediaDeviceFailure } from "livekit-client";
+import { MediaDeviceFailure, Track } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+import MyVoice from "./MyVoice";
+import ChatUI from "./Chat";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -58,15 +60,27 @@ export default function Page() {
         onDisconnected={() => {
           updateConnectionDetails(undefined);
         }}
-        className="grid grid-rows-[2fr_1fr] items-center"
       >
-        <SimpleVoiceAssistant onStateChange={setAgentState} />
-        <ControlBar
-          onConnectButtonClicked={onConnectButtonClicked}
-          agentState={agentState}
-        />
-        <RoomAudioRenderer />
-        <NoAgentNotification state={agentState} />
+
+        <div className="grid grid-cols-2 w-full h-screen">
+          <div className="grid grid-rows-2 border-r">
+            <div className="border-b flex flex-col items-center">
+              <SimpleVoiceAssistant onStateChange={setAgentState} />
+              <ControlBar
+                onConnectButtonClicked={onConnectButtonClicked}
+                agentState={agentState}
+              />
+              <RoomAudioRenderer />
+              <NoAgentNotification state={agentState} />
+            </div>
+            <div className="flex h-full w-full items-center">
+              <MyVoice />
+            </div>
+          </div>
+          <div className="h-full">
+            <ChatUI />
+          </div>
+        </div>
       </LiveKitRoom>
     </main>
   );
