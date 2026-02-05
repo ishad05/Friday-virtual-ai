@@ -64,10 +64,4 @@ npm start
 This project is open to future enhancements and community contributions. Suggestions, improvements, and feature additions are welcome.
 
 
-## Future Enhancements
-- Voice-based interaction
-- Additional personality modes
-- Agentic task execution
-- Improved user interface and integrations
-
 
